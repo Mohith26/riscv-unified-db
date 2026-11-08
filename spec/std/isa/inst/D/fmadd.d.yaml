@@ -35,3 +35,14 @@ access:
   vu: always
 data_independent_timing: false
 operation(): |
+  check_f_ok($encoding);
+  if (MUTABLE_MISA_D && CSR[misa].D == 0) {
+    raise(ExceptionCode::IllegalInstruction, mode(), $encoding);
+  }
+  RoundingMode rounding_mode = rm_to_mode(rm, $encoding);
+  Bits<64> a = F[fs1];
+  Bits<64> b = F[fs2];
+  Bits<64> c = F[fs3];
+  # (fs1 * fs2) + fs3
+  F[fd] = f64_muladd(a, b, c, rounding_mode);
+  mark_f_state_dirty();

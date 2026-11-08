@@ -32,3 +32,11 @@ access:
   vu: always
 data_independent_timing: false
 operation(): |
+  check_f_ok($encoding);
+  if (MUTABLE_MISA_D && CSR[misa].D == 0) {
+    raise(ExceptionCode::IllegalInstruction, mode(), $encoding);
+  }
+  RoundingMode rounding_mode = rm_to_mode(rm, $encoding);
+  Bits<64> a = F[fs1];
+  # the 32-bit result is sign-extended, as for fcvt.wu.s
+  X[xd] = $signed(f64_to_ui32(a, rounding_mode));

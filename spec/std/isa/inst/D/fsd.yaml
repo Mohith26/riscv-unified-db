@@ -32,3 +32,10 @@ access:
   vu: always
 data_independent_timing: false
 operation(): |
+  check_f_ok($encoding);
+  if (MUTABLE_MISA_D && CSR[misa].D == 0) {
+    raise(ExceptionCode::IllegalInstruction, mode(), $encoding);
+  }
+  XReg virtual_address = X[xs1] + $signed(imm);
+  Bits<64> value = F[fs2];
+  write_memory(64, virtual_address, value, $encoding);

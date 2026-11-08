@@ -288,6 +288,13 @@ target_compile_definitions(test_softfloat_fp PRIVATE
   UDB_FP_DIRECTED_JSONL="${UDB_ROOT}/tests/data/fp/directed/f32_fpgen_expanded.jsonl"
 )
 
+add_executable(test_softfloat_f64
+  ${CMAKE_SOURCE_DIR}/test/test_softfloat_f64.cpp
+  ${CMAKE_SOURCE_DIR}/src/NotificationHandler.cpp
+)
+target_include_directories(test_softfloat_f64 PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(test_softfloat_f64 PRIVATE hart Catch2::Catch2WithMain libsoftfloat_static)
+
 add_executable(test_regfile
   ${CMAKE_SOURCE_DIR}/test/test_regfile.cpp
   ${CMAKE_SOURCE_DIR}/src/NotificationHandler.cpp
@@ -315,6 +322,7 @@ foreach (random_test IN LISTS RANDOM_TESTS)
 endforeach()
 
 catch_discover_tests(test_softfloat_fp)
+catch_discover_tests(test_softfloat_f64)
 
 # catch_discover_tests(test_version)
 # catch_discover_tests(test_csr)

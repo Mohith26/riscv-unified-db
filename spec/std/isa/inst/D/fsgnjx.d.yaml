@@ -37,3 +37,11 @@ pseudoinstructions:
     to: fabs.d fd, fs1
 data_independent_timing: false
 operation(): |
+  check_f_ok($encoding);
+  if (MUTABLE_MISA_D && CSR[misa].D == 0) {
+    raise(ExceptionCode::IllegalInstruction, mode(), $encoding);
+  }
+  Bits<64> a = F[fs1];
+  Bits<64> b = F[fs2];
+  F[fd] = {a[63] ^ b[63], a[62:0]};
+  mark_f_state_dirty();

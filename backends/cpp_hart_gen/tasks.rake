@@ -381,6 +381,7 @@ namespace :build do
     Rake::Task["#{CPP_HART_GEN_DST}/#{build_name}/build/Makefile"].invoke
     Dir.chdir("#{CPP_HART_GEN_DST}/#{build_name}/build") do
       sh "make -j #{$jobs} test_softfloat_fp"
+      sh "make -j #{$jobs} test_softfloat_f64"
     end
   end
 
@@ -434,6 +435,7 @@ namespace :test do
       sh "make -j #{$jobs} test_bits_directed"
       sh "make -j #{$jobs} test_bits_random"
       sh "make -j #{$jobs} test_softfloat_fp"
+      sh "make -j #{$jobs} test_softfloat_f64"
       sh "make -j #{$jobs} test_regfile"
       sh "make -j #{$jobs} test_util"
       sh "ctest -T coverage -T test"
@@ -559,5 +561,6 @@ namespace :test do
     ENV["BUILD_TYPE"] = "debug"
     _, build_name = configs_build_name
     sh "#{CPP_HART_GEN_DST}/#{build_name}/build/test_softfloat_fp"
+    sh "#{CPP_HART_GEN_DST}/#{build_name}/build/test_softfloat_f64"
   end
 end

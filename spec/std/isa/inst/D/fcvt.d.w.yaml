@@ -33,3 +33,10 @@ access:
   vu: always
 data_independent_timing: false
 operation(): |
+  check_f_ok($encoding);
+  if (MUTABLE_MISA_D && CSR[misa].D == 0) {
+    raise(ExceptionCode::IllegalInstruction, mode(), $encoding);
+  }
+  # always exact, so rm does not affect the result
+  F[fd] = i32_to_f64(X[xs1][31:0]);
+  mark_f_state_dirty();

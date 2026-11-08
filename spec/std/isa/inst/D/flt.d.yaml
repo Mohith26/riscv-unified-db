@@ -32,3 +32,10 @@ access:
   vu: always
 data_independent_timing: false
 operation(): |
+  check_f_ok($encoding);
+  if (MUTABLE_MISA_D && CSR[misa].D == 0) {
+    raise(ExceptionCode::IllegalInstruction, mode(), $encoding);
+  }
+  Bits<64> a = F[fs1];
+  Bits<64> b = F[fs2];
+  X[xd] = f64_lt(a, b) ? 1 : 0;
